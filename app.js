@@ -26,19 +26,33 @@ const listingsRouter=require("./routes/listing.js");
 const reviewRouter=require("./routes/review.js");
 const userRouter=require("./routes/user.js");
 
-
-const dburl=process.env.ATLAST;
 const path =require("path");
 
+// Ensure required environment variables are set
+const dburl = process.env.ATLAST;
+if (!dburl) {
+    console.error("FATAL: ATLAST environment variable is not set!");
+    process.exit(1);
+}
 
 main().then(() =>{
     console.log("Connected to MongoDB");
 }).catch((err)=>{
     console.error("Error connecting to MongoDB",err);
+    process.exit(1);
 });
-async function main(){
-    await mongoose.connect(dburl);
 
+async function main(){
+    await mongoose.connect(dburl, {
+        maxPoolSize: 50,
+        minPoolSize: 10,
+        serverSelectionTimeoutMS: 5000,
+        socketTimeoutMS: 45000,
+        connectTimeoutMS: 10000,
+        retryWrites: true,
+        retryReads: true,
+        maxIdleTimeMS: 60000
+    });
 }
 
  app.set("view engine","ejs");
@@ -50,28 +64,28 @@ app.use(express.static(path.join(__dirname,"public")));
 
 // ********* Session and Flash **********
 const store= new MongoStore({
-mongoUrl :dburl,
-crypto :{
-    secret :process.env.SECRET
-},
-touchAfter : 24 *3600 ,
+    mongoUrl: dburl,
+    crypto: {
+        secret: process.env.SECRET || "defaultsecret"
+    },
+    touchAfter: 24 * 3600
 });
-store.on("error",()=>{
-    console.error("MongoStore error:", error);
+
+store.on("error", (err) => {
+    console.error("MongoStore error:", err);
 });
 
 const sessionOptions={
     store,
-    secret :process.env.SECRET,
+    secret: process.env.SECRET || "defaultsecret",
     resave: false,
-    saveUninitialized :true,
-    cookie :{
-         expires : Date.now() +7 * 24 *60 *60 *1000,
-         maxAge :7 * 24 *60 *60 *1000,
-         httpOnly :true,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
     }
-   
-}
+};
 
 app.use(session(sessionOptions));
 app.use(flash());
