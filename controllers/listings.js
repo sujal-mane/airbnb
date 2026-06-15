@@ -1,7 +1,19 @@
 const Listing=require("../models/listing.js");
 const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
-let mapToken=process.env.MAP_TOKEN;
-const geocodingClient = mbxGeocoding({ accessToken: mapToken });
+
+// Lazy initialize geocoding client only when needed
+let geocodingClient = null;
+
+const getGeocodingClient = () => {
+  if (!geocodingClient) {
+    const token = process.env.MAP_TOKEN;
+    if (!token) {
+      throw new Error('MAP_TOKEN environment variable is not set');
+    }
+    geocodingClient = mbxGeocoding({ accessToken: token });
+  }
+  return geocodingClient;
+};
 
 module.exports.indx=async(req,res)=>{
      const listings=await Listing.find({});
@@ -27,6 +39,7 @@ populate :{
 
 
 module.exports.create=async (req,res,next)=>{
+const geocodingClient = getGeocodingClient();
 let response= await geocodingClient.forwardGeocode({
   query:req.body.listing.location,
   limit: 2
