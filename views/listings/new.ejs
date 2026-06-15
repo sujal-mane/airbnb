@@ -1,0 +1,49 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-4 mb-4">
+  <div class="col-lg-6 col-md-8 col-sm-10 mx-auto">
+    <h3 class="form-heading">Create a New Listing</h3>
+    <form action="/listings" method="post" class="listing-form needs-validation" novalidate encType="multipart/form-data">
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input id="title" name="listing[title]" placeholder="Add a catchy title" type="text" class="form-control" required>
+        <div class="invalid-feedback">Please add a catchy title.</div>
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea id="description" name="listing[description]" placeholder="Describe your place" class="form-control" rows="4" required></textarea>
+        <div class="invalid-feedback">Please add a short description.</div>
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+    
+      <div class="mb-3">
+        <label for="image" class="form-label"> uploade Listing Image </label>
+        <input id="image" name="listing[image]" placeholder="Paste an image link" type="file" class="form-control">
+        <div class="invalid-feedback">Please enter a valid image .</div>
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+      <div class="mb-3">
+        <label for="price" class="form-label">Price (&#8377; per night)</label>
+        <input id="price" name="listing[price]" placeholder="0" type="number" min="0" class="form-control" required>
+        <div class="invalid-feedback">Please enter a valid price.</div>
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="location" class="form-label">Location</label>
+          <input id="location" name="listing[location]" placeholder="e.g. Baga Beach" type="text" class="form-control" required>
+          <div class="invalid-feedback">Please add the location.</div>
+          <div class="valid-feedback">Looks good!</div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="country" class="form-label">Country</label>
+          <input id="country" name="listing[country]" placeholder="e.g. India" type="text" class="form-control" required>
+          <div class="invalid-feedback">Please add the country.</div>
+          <div class="valid-feedback">Looks good!</div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-dark add-btn">Add</button>
+    </form>
+  </div>
+</div>
