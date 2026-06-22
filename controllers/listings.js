@@ -15,10 +15,10 @@ const getGeocodingClient = () => {
   return geocodingClient;
 };
 
-module.exports.indx=async(req,res)=>{
-     const listings=await Listing.find({});
-    res.render("listings/index.ejs",{listings});
-};
+// module.exports.indx=async(req,res)=>{
+//      const listings=await Listing.find({});
+//     res.render("listings/index.ejs",{listings});
+// };
 module.exports.new=async(req,res)=>{
      res.render("listings/new.ejs");
 };
