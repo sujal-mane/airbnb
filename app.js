@@ -104,9 +104,10 @@ app.use((req,res,next)=>{
     res.locals.currUser=req.user;
     next();
 });
-// app.get('/',(req,res)=>{
-//     res.send("Hello World i am root");
-// });
+app.get('/listings', async (req,res)=>{
+ const listings=await Listing.find({});
+    res.render("listings/index.ejs",{listings});
+ });
 
 // app.get("/register",async(req,res)=>{
 //     let demouser=  new User({
